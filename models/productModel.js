@@ -3,23 +3,23 @@ const mongoose = require("mongoose");
 const info = new mongoose.Schema({
     noOfQuantity : {
         type : String,
-        required : ["Enter please"]
+      //  required : ["Enter please"]
     },
     productName : {
         type : String,
-        required : ["Enter please"]
+       // required : ["Enter please"]
     },
     costOfProduct : {
         type : String,
-        required : ["Enter please"]
+        //required : ["Enter please"]
     },
     mrpOfProduct : {
         type : String,
-        required : ["Enter please"]
+        //required : ["Enter please"]
     },
     gst : {
         type : String,
-        required : ["Enter please"]
+        //required : ["Enter please"]
     },
     note :{
         type : String

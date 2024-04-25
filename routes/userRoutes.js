@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const login = require("../controllers/userController")
+router.route("/login").post(login)
 
-router.route("/login").post(async(req,res) => {
-    console.log(req.body);
-    res.status(202).json({
-        "message" : success
-    })
-})
+module.exports = router;
