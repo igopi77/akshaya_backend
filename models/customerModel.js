@@ -3,27 +3,27 @@ const mongoose = require("mongoose");
 const info = new mongoose.Schema({
     customerName : {
         type : String,
-        required : ["Enter please"]
+        //required : ["Enter please"]
     },
     storeName : {
         type : String,
-        required : ["Enter please"]
+       // required : ["Enter please"]
     },
     storeAddress : {
         type : String,
-        required : ["Enter please"]
+        //required : ["Enter please"]
     },
     customerAddress : {
         type : String,
-        required : ["Enter please"]
+       // required : ["Enter please"]
     },
     customerPhone : {
         type : String,
-        required : ["Enter please"]
+       // required : ["Enter please"]
     },
     customerEmail : {
         type : String,
-        required : ["Enter please"]
+       // required : ["Enter please"]
     },
 })
 
