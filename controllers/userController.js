@@ -56,4 +56,17 @@ const addAgency = asyncHandler(async (req,res) => {
     res.status(202).json({"message" : agency})
 })
 
-module.exports = {loginUser,addCustomer,addAgency};
+
+const getCustomer = asyncHandler(async (req, res) => {
+    try {
+      const customer = await customerCredentials.find({}, { customerName: 1, _id: 0 });
+      const customerName = customer.map((customer) => customer.customerName);   
+      res.status(200).json({ "customer": customerName });
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+  
+
+module.exports = {loginUser,addCustomer,addAgency,getCustomer};
