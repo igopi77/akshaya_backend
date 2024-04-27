@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
 const info = new mongoose.Schema({
+    agency : {
+        type : String
+    },
     noOfQuantity : {
         type : String,
       //  required : ["Enter please"]

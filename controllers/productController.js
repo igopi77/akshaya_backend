@@ -5,8 +5,9 @@ const sellingModel = require("../models/sellingModel");
 // @route at post
 
 const buyProduct = asyncHandler(async(req,res) => {
-    const {noOfQuantity,productName,costOfProduct,mrpOfProduct,gst,note} = req.body
+    const {agency,noOfQuantity,productName,costOfProduct,mrpOfProduct,gst,note} = req.body
     const products = await produtModel.create({
+        agency,
         noOfQuantity,
         productName,
         costOfProduct,
@@ -20,39 +21,56 @@ const buyProduct = asyncHandler(async(req,res) => {
 })
 
 const sellProduct = asyncHandler(async (req, res) => {
-    const { customer, agency, productName, quantity, payAmount } = req.body;
-    const checkproductName = await produtModel.findOne({ productName });
-  
-    if (!checkproductName) {
-      return res.status(400).json({ message: "Product not found" });
+  const { customer, agency, productName, quantity, payAmount } = req.body;
+
+  try {
+    // Assuming produtModel is correctly imported and defined
+    const products = await produtModel.find({ productName: { $in: productName } });
+
+    if (!products || products.length !== productName.length ) {
+      return res.status(400).json({ message: "One or more products not found" });
     }
-  
-    const actualPrice = checkproductName.costOfProduct;
-    const mrp = checkproductName.mrpOfProduct;
-    const balance = mrp - payAmount;
-    const profit = payAmount - actualPrice;
-    checkproductName.noOfQuantity = checkproductName.noOfQuantity - quantity;
-  
-    try {
-      await checkproductName.save(); // Save the updated product quantity
-  
-      const info = await sellingModel.create({
-        customer,
-        agency,
-        productName,
-        quantity,
-        payAmount,
-        balance,
-        profit,
-      });
-  
-      res.status(202).json({ message: info });
-      console.log(`Selling a product ${info}`);
-    } catch (error) {
-      console.error("Error while selling product:", error);
-      res.status(500).json({ message: "Internal Server Error" });
+    console.log(products[0]);
+
+    let totalBalance = 0;
+    let totalProfit = 0;
+
+    for (let i = 0; i < products.length; i++) {
+      const product = products[i];
+      const actualPrice = product.costOfProduct;
+      const mrp = product.mrpOfProduct;
+      const balance = mrp - payAmount[i];
+      const profit = payAmount[i] - actualPrice;
+
+      if (product.noOfQuantity < quantity[i]) {
+        return res.status(400).json({ message: `Insufficient quantity for ${productName[i]}` });
+      }
+
+      product.noOfQuantity -= quantity[i];
+      totalBalance += balance;
+      totalProfit += profit;
+
+      await product.save(); // Save the updated product quantity
     }
-  });
+
+    const info = await sellingModel.create({
+      customer,
+      agency,
+      productName,
+      quantity,
+      payAmount,
+      totalBalance,
+      totalProfit,
+    });
+
+    res.status(202).json({ message: info });
+    console.log(`Selling products: ${productName.join(', ')}`);
+  } catch (error) {
+    console.error("Error while selling products:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 
 
   const getProduct = asyncHandler(async (req, res) => {

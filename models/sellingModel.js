@@ -6,19 +6,19 @@ const info = new mongoose.Schema({
       //  required : ["Enter please"]
     },
     agency : {
-        type : String,
+        type : Array,
        // required : ["Enter please"]
     },
     productName : {
-        type : String,
+        type : Array,
         //required : ["Enter please"]
     },
     quantity : {
-        type : String,
+        type : Array,
         //required : ["Enter please"]
     },
     payAmount : {
-        type : String,
+        type : Array,
         //required : ["Enter please"]
     },
     balance :{
