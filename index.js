@@ -1,5 +1,5 @@
 const express = require("express");
-const dbConnection = require("./controllers/dbConnection");
+const dbConnection = require("./config/dbConnection");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const bodyparser = require("body-parser");

@@ -6,18 +6,27 @@ const sellingModel = require("../models/sellingModel");
 
 const buyProduct = asyncHandler(async(req,res) => {
     const {agency,noOfQuantity,productName,costOfProduct,mrpOfProduct,gst,note} = req.body
+    if(!agency || !noOfQuantity || !productName || !costOfProduct || !mrpOfProduct || !gst)
+    {
+      console.log("All the fields are mandatory");
+    }
+  else
+  {
     const products = await produtModel.create({
-        agency,
-        noOfQuantity,
-        productName,
-        costOfProduct,
-        mrpOfProduct,
-        gst,
-        note
-    })
-    res.status(202).json({
-        "message" : products
-    })
+      agency,
+      noOfQuantity,
+      productName,
+      costOfProduct,
+      mrpOfProduct,
+      gst,
+      note
+  })
+  res.status(202).json({
+      "message" : products,
+      "status" : true
+  })
+  console.log(`added successfully in products ${products}`);
+  }
 })
 
 const sellProduct = asyncHandler(async (req, res) => {
@@ -27,9 +36,9 @@ const sellProduct = asyncHandler(async (req, res) => {
     // Assuming produtModel is correctly imported and defined
     const products = await produtModel.find({ productName: { $in: productName } });
 
-    if (!products || products.length !== productName.length ) {
-      return res.status(400).json({ message: "One or more products not found" });
-    }
+    // if (!products || products.length !== productName.length ) {
+    //   return res.status(400).json({ message: "One or more products not found","status" : false });
+    // } // this is not working if i add two product with same name like pen,pen
     console.log(products[0]);
 
     let totalBalance = 0;
@@ -43,7 +52,7 @@ const sellProduct = asyncHandler(async (req, res) => {
       const profit = payAmount[i] - actualPrice;
 
       if (product.noOfQuantity < quantity[i]) {
-        return res.status(400).json({ message: `Insufficient quantity for ${productName[i]}` });
+        return res.status(400).json({ message: `Insufficient quantity for ${productName[i]}`,"status" : false });
       }
 
       product.noOfQuantity -= quantity[i];
@@ -63,7 +72,7 @@ const sellProduct = asyncHandler(async (req, res) => {
       totalProfit,
     });
 
-    res.status(202).json({ message: info });
+    res.status(202).json({ "message": info , "status" : true});
     console.log(`Selling products: ${productName.join(', ')}`);
   } catch (error) {
     console.error("Error while selling products:", error);
@@ -78,10 +87,10 @@ const sellProduct = asyncHandler(async (req, res) => {
       const products = await produtModel.find({}, { productName: 1, _id: 0 }); 
       const productNames = products.map((product) => product.productName); 
   
-      res.status(200).json({ products: productNames });
+      res.status(200).json({ "products": productNames,"status" : true });
     } catch (error) {
       console.error("Error fetching products:", error);
-      res.status(500).json({ message: "Internal Server Error" });
+      res.status(500).json({ message: "Internal Server Error","status" : false });
     }
   });
   

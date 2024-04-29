@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const info = new mongoose.Schema({
     agency : {
-        type : String
+        type : String,
     },
     noOfQuantity : {
         type : String,
