@@ -5,6 +5,9 @@ const info = new mongoose.Schema({
         type : String,
       //  required : ["Enter please"]
     },
+    productId : {
+        type : Array
+    },
     agency : {
         type : Array,
        // required : ["Enter please"]

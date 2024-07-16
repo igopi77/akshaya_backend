@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const info = new mongoose.Schema({
+    productId : {
+        type : String,
+        unique : true
+    },
     agency : {
         type : String,
     },
